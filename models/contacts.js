@@ -19,6 +19,8 @@ async function getContactById(contactId) {
   return contact || null;
 }
 
+getContactById("qdggE76Jtbfd9eWJHrssH");
+
 function updateContacts(contacts) {
   return fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), "utf8");
 }
@@ -56,16 +58,16 @@ async function addContact(name, email, phone) {
   return newContact;
 }
 
-async function updateContactsById(contactId, body) {
+async function updateContactsById(id, body) {
   const contacts = await listContacts();
 
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const index = contacts.findIndex((contact) => contact.id === id);
 
   if (index === -1) {
     return null;
   }
 
-  contacts[index] = { contactId, ...body };
+  contacts[index] = { id, ...body };
   await updateContacts(contacts);
   return contacts[index];
 }

@@ -11,6 +11,7 @@ const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  id: Joi.string().required(),
 });
 
 router.get("/", async (req, res, next) => {
@@ -22,9 +23,10 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
+    console.log(id);
     const result = await contacts.getContactById(id);
 
     if (!result) {
@@ -42,7 +44,10 @@ router.post("/", async (req, res, next) => {
     const { error } = addSchema.validate(req.body);
 
     if (error) {
-      throw HttpError(400, "missing required name field");
+      throw HttpError(
+        400,
+        `missing required ${error.details[0].context.label} field`
+      );
     }
 
     const result = await contacts.addContact(req.body);
@@ -52,11 +57,11 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   try {
-    const { contactId } = req.params;
+    const { id } = req.params;
 
-    const result = await contacts.removeContact(contactId);
+    const result = await contacts.removeContact(id);
 
     if (!result) {
       throw HttpError(404, "Not found");
@@ -71,19 +76,28 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
 
-    if (error) {
+    const body = req.body;
+
+    const bodyLength = Object.keys(body).length;
+
+    if (bodyLength === 0) {
       throw HttpError(400, "missing fields");
     }
-    const body = req.body;
-    const { contactId } = req.params;
 
-    console.log(contactId);
+    if (error) {
+      throw HttpError(
+        400,
+        `missing required ${error.details[0].context.label} field`
+      );
+    }
 
-    const result = await contacts.updateContactsById(contactId, body);
+    const { id } = req.params;
+
+    const result = await contacts.updateContactsById(id, body);
     console.log(result);
 
     if (!result) {
