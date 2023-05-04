@@ -52,6 +52,7 @@ const updateById = async (req, res) => {
   //   const { error } = addSchema.validate(req.body);
 
   const body = req.body;
+  console.log(body);
 
   const bodyLength = Object.keys(body).length;
 
