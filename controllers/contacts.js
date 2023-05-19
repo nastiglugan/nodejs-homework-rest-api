@@ -20,14 +20,14 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  //   const { error } = addSchema.validate(req.body);
+  // const { error } = addSchema.validate(req.body);
 
-  //   if (error) {
-  //     throw HttpError(
-  //       400,
-  //       `missing required ${error.details[0].context.label} field`
-  //     );
-  //   }
+  // if (error) {
+  //   throw HttpError(
+  //     400,
+  //     `missing required ${error.details[0].context.label} field`
+  //   );
+  // }
 
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
@@ -52,13 +52,14 @@ const updateById = async (req, res) => {
   //   const { error } = addSchema.validate(req.body);
 
   const body = req.body;
-  console.log(body);
+  // console.log(body);
 
-  const bodyLength = Object.keys(body).length;
+  // // const bodyLength = Object.keys(body).length;
+  // // console.log(bodyLength);
 
-  if (bodyLength === 0) {
-    throw HttpError(400, "missing fields");
-  }
+  // if (!body) {
+  //   throw HttpError(400, "missing fields");
+  // }
 
   //   if (error) {
   //     throw HttpError(
